@@ -1,6 +1,6 @@
-import Firebase from 'firebase/app'
+import { initializeApp } from 'firebase/app'
 import 'firebase/firestore'
-import 'firebase/auth'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 
 const config = {
   apiKey: 'AIzaSyABkU2O-KVhkxEK-YE54XZqzP8GycV6xSM',
@@ -11,7 +11,9 @@ const config = {
   appId: '1:507415416694:web:55e13eabdf727e39e73457',
 }
 
-const firebase = Firebase.initializeApp(config)
-const { FieldValue } = Firebase.firestore
+const firebase = initializeApp(config)
 
-export { firebase, FieldValue }
+export type Auth = typeof getAuth
+export type SignInWithEmailAndPasswordType = typeof signInWithEmailAndPassword
+
+export { firebase, getAuth, signInWithEmailAndPassword }
