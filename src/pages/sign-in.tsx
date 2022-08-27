@@ -1,10 +1,10 @@
-import { FormEvent, useContext, useEffect, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import FirebaseContext from '../context/firebase'
 import * as ROUTES from '../constants/routes'
-export default function Login() {
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+
+export default function SignIn() {
   const navigate = useNavigate()
-  const { getAuth, signInWithEmailAndPassword } = useContext(FirebaseContext)
 
   const [emailAddress, setEmailAddress] = useState('')
   const [password, setPassword] = useState('')
@@ -13,9 +13,9 @@ export default function Login() {
 
   const isInvalid = password === '' || emailAddress === ''
 
-  const handleLogin = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSignIn = async (event: FormEvent<HTMLFormElement>) => {
     if (!getAuth || !signInWithEmailAndPassword) return
-    signInWithEmailAndPassword
+
     event.preventDefault()
     try {
       const auth = getAuth()
@@ -29,7 +29,7 @@ export default function Login() {
   }
 
   useEffect(() => {
-    document.title = 'Login - Unogram'
+    document.title = 'Sign In - Unogram'
   }, [])
 
   return (
@@ -44,12 +44,13 @@ export default function Login() {
           </h1>
           {error && <p className="mb-4 text-xs text-red-primary">{error}</p>}
 
-          <form onSubmit={handleLogin} method="POST">
+          <form onSubmit={handleSignIn} method="POST">
             <input
               type="text"
               aria-label="Enter your email address"
               placeholder="Email address"
               className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
+              value={emailAddress}
               onChange={({ target }) => setEmailAddress(target.value)}
             />
             <input
@@ -57,6 +58,7 @@ export default function Login() {
               aria-label="Enter your email password"
               placeholder="Password"
               className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
+              value={password}
               onChange={({ target }) => setPassword(target.value)}
             />
             <button
@@ -73,7 +75,7 @@ export default function Login() {
         <div className="flex justify-center items-center flex-col w-full bg-white p-4 border rounded border-gray-primary">
           <p className="text-sm">
             Don't gave an account?{` `}
-            <Link to="/signup" className="font-bold text-blue-medium">
+            <Link to={ROUTES.SIGNUP} className="font-bold text-blue-medium">
               Sign up
             </Link>
           </p>
