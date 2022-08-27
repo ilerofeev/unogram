@@ -505,6 +505,9 @@ video {
 .flex {
   display: flex;
 }
+.grid {
+  display: grid;
+}
 .h-screen {
   height: 100vh;
 }
@@ -528,6 +531,9 @@ video {
 }
 .max-w-screen-md {
   max-width: 768px;
+}
+.max-w-screen-lg {
+  max-width: 1024px;
 }
 .flex-col {
   flex-direction: column;
@@ -567,6 +573,9 @@ video {
   padding-left: 1rem;
   padding-right: 1rem;
 }
+.text-center {
+  text-align: center;
+}
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
@@ -574,6 +583,10 @@ video {
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
+}
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
 }
 .font-bold {
   font-weight: 700;
