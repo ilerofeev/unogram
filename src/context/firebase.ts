@@ -1,15 +1,10 @@
-import { FirebaseApp } from 'firebase/app'
+import { Firestore } from 'firebase/firestore'
 import { createContext } from 'react'
-import { Auth, SignInWithEmailAndPasswordType } from '../lib/firebase'
 
 const FirebaseContext = createContext<{
-  firebase: FirebaseApp | null
-  getAuth: Auth | null
-  signInWithEmailAndPassword: SignInWithEmailAndPasswordType | null
+  firestore: Firestore | null
 }>({
-  firebase: null,
-  getAuth: null,
-  signInWithEmailAndPassword: null,
+  firestore: null,
 })
 
 export default FirebaseContext
