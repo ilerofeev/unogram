@@ -1,5 +1,15 @@
 import { firestore } from '../lib/firebase'
-import { collection, getDocs, query, where, limit } from 'firebase/firestore/lite'
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  limit,
+  doc,
+  updateDoc,
+  arrayRemove,
+  arrayUnion,
+} from 'firebase/firestore/lite'
 import { User } from '../hooks/use-user'
 
 export async function doesUsernameExist(username: string) {
@@ -36,4 +46,26 @@ export async function getSuggestedProfiles(userId: string, following: string[]) 
     .filter((profile) => !following.includes(profile.userId))
 
   return profiles
+}
+
+export async function updateLoggedInUserFollowing(
+  loggedInUserDocId: string,
+  profileId: string,
+  isFollowingProfile: boolean
+) {
+  const docRef = doc(firestore, 'users', loggedInUserDocId)
+  updateDoc(docRef, {
+    following: isFollowingProfile ? arrayRemove(profileId) : arrayUnion(profileId),
+  })
+}
+
+export async function updateFollowedUserFollowers(
+  profileDocId: string,
+  loggedInUserDocId: string,
+  isFollowingProfile: boolean
+) {
+  const docRef = doc(firestore, 'users', profileDocId)
+  updateDoc(docRef, {
+    followers: isFollowingProfile ? arrayRemove(loggedInUserDocId) : arrayUnion(loggedInUserDocId),
+  })
 }
