@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
+import { User } from '../../hooks/use-user'
 import { getSuggestedProfiles } from '../../services/firebase'
+import SuggestedProfile from './suggested-profile'
 
 export default function Suggestions({
   userId,
   following,
+  loggedInUserDocId,
 }: {
   userId?: string
   following?: string[]
+  loggedInUserDocId?: string
 }) {
-  const [profiles, setProfiles] = useState<{}[] | null>(null)
+  const [profiles, setProfiles] = useState<User[] | null>(null)
 
   useEffect(() => {
     async function suggestedProfiles() {
@@ -26,6 +30,19 @@ export default function Suggestions({
     <div className="rounded flex flex-col">
       <div className="text-sm flex items-center justify-between mb-2">
         <p className="font-bold text-gray-base">Suggestions for you</p>
+      </div>
+      <div className="mt-4 grid gap-5">
+        {userId &&
+          profiles.map((profile) => (
+            <SuggestedProfile
+              key={profile.userId}
+              profileDocId={profile.docId}
+              username={profile.username}
+              profileId={profile.userId}
+              userId={userId}
+              loggedInUserDocId={loggedInUserDocId}
+            />
+          ))}
       </div>
     </div>
   )
