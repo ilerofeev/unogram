@@ -11,6 +11,7 @@ import {
   arrayUnion,
 } from 'firebase/firestore/lite'
 import { User } from '../hooks/use-user'
+import { Photo } from '../hooks/use-photos'
 
 export async function doesUsernameExist(username: string) {
   const collectionRef = collection(firestore, 'users')
@@ -25,8 +26,8 @@ export async function getUserByUserId(userId: string) {
   const q = query(collectionRef, where('userId', '==', userId))
   const result = await getDocs(q)
 
-  const user = result.docs.map((item) => ({
-    ...item.data(),
+  const [user] = result.docs.map((item) => ({
+    ...(item.data() as User),
     docId: item.id,
   }))
 
@@ -54,7 +55,7 @@ export async function updateLoggedInUserFollowing(
   isFollowingProfile: boolean
 ) {
   const docRef = doc(firestore, 'users', loggedInUserDocId)
-  updateDoc(docRef, {
+  await updateDoc(docRef, {
     following: isFollowingProfile ? arrayRemove(profileId) : arrayUnion(profileId),
   })
 }
@@ -65,7 +66,32 @@ export async function updateFollowedUserFollowers(
   isFollowingProfile: boolean
 ) {
   const docRef = doc(firestore, 'users', profileDocId)
-  updateDoc(docRef, {
+  await updateDoc(docRef, {
     followers: isFollowingProfile ? arrayRemove(loggedInUserDocId) : arrayUnion(loggedInUserDocId),
   })
+}
+
+export async function getPhotos(userId: string, following: string[]) {
+  const collectionRef = collection(firestore, 'photos')
+  const q = query(collectionRef, where('userId', 'in', following))
+
+  const result = await getDocs(q)
+
+  const userFollowersPhotos = result.docs.map((photo) => ({
+    ...(photo.data() as Photo),
+    docId: photo.id,
+  }))
+
+  const photosWithUserDetails = await Promise.all(
+    userFollowersPhotos.map(async (photo) => {
+      let userLikedPhoto = false
+      if (photo.likes.includes(userId)) {
+        userLikedPhoto = true
+      }
+      const { username } = await getUserByUserId(photo.userId)
+      return { ...photo, username, userLikedPhoto }
+    })
+  )
+
+  return photosWithUserDetails
 }
