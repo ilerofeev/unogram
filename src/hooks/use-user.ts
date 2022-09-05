@@ -7,6 +7,7 @@ export type User = {
   fullName: string
   userId: string
   following: string[]
+  followers: string[]
   docId: string
 }
 

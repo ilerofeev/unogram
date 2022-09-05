@@ -10,8 +10,6 @@ export default function IsUserLoggedIn({
 }) {
   const location = useLocation()
 
-  console.log(loggedInPath)
-
   return !user ? (
     <Outlet />
   ) : (
