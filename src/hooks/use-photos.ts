@@ -11,7 +11,6 @@ export type Photo = {
   caption: string
   userLikedPhoto: boolean
   comments: { comment: string; displayName: string }[]
-  posted: number
 }
 
 export type FollowedPhoto = Photo & {
