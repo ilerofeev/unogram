@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-export default function Header({ username }: { username: string }) {
+export default function PostHeader({ username }: { username: string }) {
   return (
     <div className="flex border-b border-gray-primary h-4 p-4 py-8">
       <div className="flex items-center">

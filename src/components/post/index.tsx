@@ -3,7 +3,7 @@ import { FollowedPhoto } from '../../hooks/use-photos'
 import Actions from './Actions'
 import Comments from './Comments'
 import Footer from './Footer'
-import Header from './Header'
+import PostHeader from './Post-header'
 import Image from './Image'
 
 export default function Post({ content }: { content: FollowedPhoto }) {
@@ -16,7 +16,7 @@ export default function Post({ content }: { content: FollowedPhoto }) {
       className="rounded col-span-4 border bg-white
    border-gray-primary mb-12"
     >
-      <Header username={content.username} />
+      <PostHeader username={content.username} />
       <Image src={content.imageSrc} caption={content.caption} />
       <Actions
         docId={content.docId}
