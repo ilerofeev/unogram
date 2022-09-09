@@ -1,11 +1,13 @@
 import { KeyboardEvent, useContext } from 'react'
-import UserContext from '../context/user'
 import * as ROUTES from '../constants/routes'
 import { Link } from 'react-router-dom'
 import { getAuth, signOut } from 'firebase/auth'
+import useUser from '../hooks/use-user'
+import UserContext from '../context/user'
 
 export default function Header() {
-  const user = useContext(UserContext)
+  const loggedInUser = useContext(UserContext)
+  const { user } = useUser(loggedInUser?.uid)
   const auth = getAuth()
 
   function handleSignOut() {
@@ -28,7 +30,7 @@ export default function Header() {
             </h1>
           </div>
           <div className="text-gray-700 text-center flex items-center">
-            {user ? (
+            {user.username ? (
               <>
                 <Link to={ROUTES.DASHBOARD} aria-label="Dashboard">
                   <svg
@@ -68,11 +70,11 @@ export default function Header() {
                   </svg>
                 </button>
                 <div className="flex items-center cursor-pointer">
-                  <Link to={`/p/${user.displayName}`}>
+                  <Link to={`/p/${user.username}`}>
                     <img
                       className="rounded-full h-8 w-8 flex"
-                      src={`/images/avatars/${user.displayName}.jpg`}
-                      alt={`${user.displayName} profile`}
+                      src={`/images/avatars/${user.username}.jpg`}
+                      alt={`${user.username} profile`}
                     ></img>
                   </Link>
                 </div>
@@ -84,7 +86,7 @@ export default function Header() {
                     type="button"
                     className="bg-blue-medium font-bold text-sm rounded text-white w-20 h-8"
                   >
-                    Sign In
+                    Signin
                   </button>
                 </Link>
                 <Link to={ROUTES.SIGNUP}>
