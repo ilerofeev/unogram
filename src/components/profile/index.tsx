@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from 'react'
-import Header from './header'
+import Header from './profile-header'
 import Photos from './photos'
 import { getUserPhotosByUserId } from '../../services/firebase'
 import { User } from '../../hooks/use-user'
