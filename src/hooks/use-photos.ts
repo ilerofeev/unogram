@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from 'react'
-import UserContext from '../context/user'
-import { getPhotos, getUserByUserId } from '../services/firebase'
+import { useEffect, useState } from 'react'
+import { getPhotos } from '../services/firebase'
+import { User } from './use-user'
 
 export type Photo = {
   userId: string
@@ -11,32 +11,30 @@ export type Photo = {
   caption: string
   userLikedPhoto: boolean
   comments: { comment: string; displayName: string }[]
+  docId: string
 }
 
 export type FollowedPhoto = Photo & {
   docId: string
 }
 
-export default function usePhotos() {
+export default function usePhotos(user: User) {
   const [photos, setPhotos] = useState<FollowedPhoto[] | null>(null)
-
-  const user = useContext(UserContext)
 
   useEffect(() => {
     async function getTimelinePhotos() {
-      const { following } = await getUserByUserId(user!.uid)
-      let followedUserPhotos: FollowedPhoto[] = []
+      if (user.following?.length > 0) {
+        const followedUserPhotos: FollowedPhoto[] = await getPhotos(user!.userId, user!.following)
 
-      if (following.length > 0) {
-        followedUserPhotos = await getPhotos(user!.uid, following)
+        followedUserPhotos.sort((a, b) => b.dateCreated - a.dateCreated)
+        setPhotos(followedUserPhotos)
+        return
       }
-
-      followedUserPhotos.sort((a, b) => b.dateCreated - a.dateCreated)
-      setPhotos(followedUserPhotos)
+      setPhotos([])
     }
 
     if (user) getTimelinePhotos()
-  }, [user?.uid])
+  }, [user?.userId])
 
   return { photos }
 }

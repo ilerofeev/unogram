@@ -27,11 +27,11 @@ export async function getUserByUserId(userId: string) {
   const result = await getDocs(q)
 
   const [user] = result.docs.map((item) => ({
-    ...(item.data() as User),
+    ...item.data(),
     docId: item.id,
   }))
 
-  return user
+  return { ...(user as User) }
 }
 
 export async function getSuggestedProfiles(userId: string, following: string[]) {
@@ -40,10 +40,13 @@ export async function getSuggestedProfiles(userId: string, following: string[]) 
   const result = await getDocs(q)
 
   const profiles = result.docs
-    .map((item) => ({
-      ...(item.data() as User),
-      docId: item.id,
-    }))
+    .map(
+      (item) =>
+        ({
+          ...item.data(),
+          docId: item.id,
+        } as User)
+    )
     .filter((profile) => !following.includes(profile.userId))
 
   return profiles
@@ -77,10 +80,13 @@ export async function getPhotos(userId: string, following: string[]) {
 
   const result = await getDocs(q)
 
-  const userFollowersPhotos = result.docs.map((photo) => ({
-    ...(photo.data() as Photo),
-    docId: photo.id,
-  }))
+  const userFollowersPhotos = result.docs.map(
+    (photo) =>
+      ({
+        ...photo.data(),
+        docId: photo.id,
+      } as Photo)
+  )
 
   const photosWithUserDetails = await Promise.all(
     userFollowersPhotos.map(async (photo) => {
@@ -101,10 +107,13 @@ export async function getUserByUsername(username: string) {
   const q = query(collectionRef, where('username', '==', username.toLowerCase()))
   const result = (await getDocs(q)).docs
 
-  return result.map((item) => ({
-    ...(item.data() as User),
-    docId: item.id,
-  }))
+  return result.map(
+    (item) =>
+      ({
+        ...item.data(),
+        docId: item.id,
+      } as User)
+  )
 }
 
 export async function getUserPhotosByUserId(userId: string) {
@@ -112,10 +121,13 @@ export async function getUserPhotosByUserId(userId: string) {
   const q = query(collectionRef, where('userId', '==', userId))
   const result = (await getDocs(q)).docs
 
-  const photos = result.map((photo) => ({
-    ...(photo.data() as Photo),
-    docId: photo.id,
-  }))
+  const photos = result.map(
+    (photo) =>
+      ({
+        ...photo.data(),
+        docId: photo.id,
+      } as Photo)
+  )
   return photos
 }
 

@@ -1,17 +1,20 @@
+import { useContext } from 'react'
 import Skeleton from 'react-loading-skeleton'
+import LoggedInUserContext from '../context/loggedInUser'
 import usePhotos from '../hooks/use-photos'
 import Post from './post'
 
 export default function Timeline() {
-  const { photos } = usePhotos()
+  const { user } = useContext(LoggedInUserContext)
+  const { photos } = usePhotos(user)
 
   function renderPhotos() {
-    if (!photos) return <Skeleton count={4} width={640} height={500} className="mb-5" />
+    if (!user.following) return <Skeleton count={2} width={640} height={500} className="mb-5" />
 
-    return photos.length > 0 ? (
-      photos.map((photo) => <Post key={photo.docId} content={photo} />)
+    return user.following.length === 0 ? (
+      <p className="flex justify-center font-bold">Follow other people to see Photos</p>
     ) : (
-      <p className="text-center text-2xl">Follow people to see photos</p>
+      photos && photos.map((content) => <Post key={content.docId} content={content} />)
     )
   }
 

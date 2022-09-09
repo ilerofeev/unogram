@@ -1,8 +1,8 @@
 import * as ROUTES from '../constants/routes'
-import { User } from '../hooks/use-user'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
+import { User } from 'firebase/auth'
 
-export default function ProtectedRoute({ user }: { user: User }) {
+export default function ProtectedRoute({ user }: { user: User | null }) {
   const location = useLocation()
 
   return user ? (

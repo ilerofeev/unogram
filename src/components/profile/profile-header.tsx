@@ -1,8 +1,9 @@
-import { Dispatch, useEffect, useState } from 'react'
+import { Dispatch, useContext, useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import useUser, { User } from '../../hooks/use-user'
 import { isUserFollowingProfile, toggleFollow } from '../../services/firebase'
 import { DEFAULT_IMAGE_PATH } from '../../constants/paths'
+import UserContext from '../../context/user'
 
 export default function Header({
   photosCount,
@@ -16,13 +17,14 @@ export default function Header({
   setFollowerCount: Dispatch<any>
 }) {
   const { docId, followers, following, fullName, userId, username } = profile
+  const loggedInUser = useContext(UserContext)
+  const { user } = useUser(loggedInUser?.uid)
 
-  const { user } = useUser()
   const [isFollowingProfile, setIsFollowingProfile] = useState<boolean | null>(null)
-  const activeBtnFollow = user?.username && user?.username !== username
+  const activeBtnFollow = user && user.username && user?.username !== username
 
   const handleToggleFollow = async () => {
-    if (isFollowingProfile === null) return
+    if (user === null || typeof isFollowingProfile !== 'boolean') return
     setIsFollowingProfile((isFollowingProfile) => !isFollowingProfile)
     setFollowerCount({
       followerCount: isFollowingProfile ? followerCount - 1 : followerCount + 1,
@@ -32,15 +34,14 @@ export default function Header({
 
   useEffect(() => {
     const isLoggedInUserFollowingProfile = async () => {
-      const isFollowing = await isUserFollowingProfile(user.username, userId)
-
+      const isFollowing = await isUserFollowingProfile(user!.username, userId)
       setIsFollowingProfile(!!isFollowing)
     }
 
-    if (user.username && userId) {
+    if (user?.username && userId) {
       isLoggedInUserFollowingProfile()
     }
-  }, [user.username, userId])
+  }, [user?.username, userId])
 
   return (
     <div className="grid grid-cols-3 gap-4 justify-between mx-auto max-w-screen-lg">
@@ -60,7 +61,7 @@ export default function Header({
         )}
       </div>
       <div className="flex items-center justify-center flex-col col-span-2">
-        <div className="container flex items-center">
+        <div className="container flex items-center items-center">
           <p className="text-2xl mr-4">{username}</p>
           {activeBtnFollow && isFollowingProfile === null ? (
             <Skeleton count={1} width={80} height={32} />
