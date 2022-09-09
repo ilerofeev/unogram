@@ -24,6 +24,7 @@ export default function SignUp() {
     const usernameExists = await doesUsernameExist(username)
 
     if (usernameExists) {
+      setUsername('')
       setError('That username is already taken, please try another.')
     } else {
       try {
@@ -44,6 +45,7 @@ export default function SignUp() {
           fullName,
           emailAddress: emailAddress.toLowerCase(),
           following: [],
+          followers: [],
           dateCreated: Date.now(),
         })
 

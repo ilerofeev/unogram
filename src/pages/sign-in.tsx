@@ -68,7 +68,7 @@ export default function SignIn() {
                 isInvalid && 'opacity-50'
               }`}
             >
-              Log In
+              Login
             </button>
           </form>
         </div>
