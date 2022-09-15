@@ -1,6 +1,6 @@
 import { RefObject, useState } from 'react'
 import { formatDistance } from 'date-fns'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import AddComment from './Add-comment'
 
 export default function Comments({
@@ -26,8 +26,10 @@ export default function Comments({
       <div className="p-4 pt-1 pb-4">
         {comments.slice(0, commentsSlice).map((item) => (
           <p key={`${item.comment}-${item.displayName}`} className="mb-1">
-            <Link to={`/p/${item.displayName}`}>
-              <span className="mr-1 font-bold">{item.displayName}</span>
+            <Link href={`/p/${item.displayName}`}>
+              <a>
+                <span className="mr-1 font-bold">{item.displayName}</span>
+              </a>
             </Link>
             <span>{item.comment}</span>
           </p>

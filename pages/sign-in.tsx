@@ -1,10 +1,12 @@
-import { FormEvent, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import Link from 'next/link'
 import * as ROUTES from '../constants/routes'
+import { FormEvent, useEffect, useState } from 'react'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { useRouter } from 'next/router'
+import Image from 'next/image'
 
 export default function SignIn() {
-  const navigate = useNavigate()
+  const router = useRouter()
 
   const [emailAddress, setEmailAddress] = useState('')
   const [password, setPassword] = useState('')
@@ -20,7 +22,7 @@ export default function SignIn() {
     try {
       const auth = getAuth()
       await signInWithEmailAndPassword(auth, emailAddress, password)
-      navigate(ROUTES.DASHBOARD)
+      router.push(ROUTES.DASHBOARD)
     } catch (error: any) {
       setEmailAddress('')
       setPassword('')
@@ -35,12 +37,17 @@ export default function SignIn() {
   return (
     <div className="container flex mx-auto max-w-screen-md items-center h-screen">
       <div className="flex w-3/5">
-        <img src="/images/iphone-with-profile.jpg" alt="iPhone with Instagram" />
+        <Image
+          src="/images/iphone-with-profile.jpg"
+          alt="iPhone with Instagram"
+          width="461"
+          height="627"
+        />
       </div>
       <div className="flex flex-col w-2/5">
         <div className="flex flex-col items-center bg-white p-4 border rounded border-gray-primary">
-          <h1 className="flex justify-center w-full">
-            <img src="/images/logo.png" alt="Unogram" className="mt-2 w-6/12 mb-4" />
+          <h1 className="flex justify-center mt-2 w-6/12 mb-4">
+            <Image src="/images/logo.png" alt="Unogram" width="137" height="39" />
           </h1>
           {error && <p className="mb-4 text-xs text-red-primary">{error}</p>}
 
@@ -74,9 +81,9 @@ export default function SignIn() {
         </div>
         <div className="flex justify-center items-center flex-col w-full bg-white p-4 border rounded border-gray-primary">
           <p className="text-sm">
-            Don't gave an account?{` `}
-            <Link to={ROUTES.SIGNUP} className="font-bold text-blue-medium">
-              Sign up
+            {`Don't gave an account? `}
+            <Link href={ROUTES.SIGNUP}>
+              <a className="font-bold text-blue-medium">Sign up</a>
             </Link>
           </p>
         </div>

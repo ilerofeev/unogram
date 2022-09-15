@@ -1,13 +1,15 @@
+import Link from 'next/link'
+import * as ROUTES from '../constants/routes'
 import { createUserWithEmailAndPassword, getAuth, updateProfile } from 'firebase/auth'
 import { collection, addDoc } from 'firebase/firestore/lite'
+import { useRouter } from 'next/router'
 import { FormEvent, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import * as ROUTES from '../constants/routes'
-import { firestore } from '../lib/firebase'
 import { doesUsernameExist } from '../services/firebase'
+import Image from 'next/image'
+import { firestore } from '../lib/firebase'
 
 export default function SignUp() {
-  const navigate = useNavigate()
+  const router = useRouter()
 
   const [username, setUsername] = useState('')
   const [fullName, setFullName] = useState('')
@@ -49,7 +51,7 @@ export default function SignUp() {
           dateCreated: Date.now(),
         })
 
-        navigate(ROUTES.DASHBOARD)
+        router.push(ROUTES.DASHBOARD)
       } catch (error) {
         setFullName('')
         setEmailAddress('')
@@ -66,12 +68,17 @@ export default function SignUp() {
   return (
     <div className="container flex mx-auto max-w-screen-md items-center h-screen">
       <div className="flex w-3/5">
-        <img src="/images/iphone-with-profile.jpg" alt="iPhone with Instagram" />
+        <Image
+          src="/images/iphone-with-profile.jpg"
+          alt="iPhone with Instagram"
+          width="460"
+          height="627"
+        />
       </div>
       <div className="flex flex-col w-2/5">
         <div className="flex flex-col items-center bg-white p-4 border rounded border-gray-primary">
-          <h1 className="flex justify-center w-full">
-            <img src="/images/logo.png" alt="Unogram" className="mt-2 w-6/12 mb-4" />
+          <h1 className="flex justify-center mt-2 w-6/12 mb-4">
+            <Image src="/images/logo.png" alt="Unogram" width="137" height="39" />
           </h1>
           {error && <p className="mb-4 text-xs text-red-primary">{error}</p>}
 
@@ -122,8 +129,8 @@ export default function SignUp() {
         <div className="flex justify-center items-center flex-col w-full bg-white p-4 border rounded border-gray-primary">
           <p className="text-sm">
             Have an account?{` `}
-            <Link to={ROUTES.SIGNIN} className="font-bold text-blue-medium">
-              Sign In
+            <Link href={ROUTES.SIGNIN}>
+              <a className="font-bold text-blue-medium">Sign In</a>
             </Link>
           </p>
         </div>

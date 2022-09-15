@@ -4,6 +4,7 @@ import useUser, { User } from '../../hooks/use-user'
 import { isUserFollowingProfile, toggleFollow } from '../../services/firebase'
 import { DEFAULT_IMAGE_PATH } from '../../constants/paths'
 import UserContext from '../../context/user'
+import Image from 'next/image'
 
 export default function Header({
   photosCount,
@@ -41,27 +42,31 @@ export default function Header({
     if (user?.username && userId) {
       isLoggedInUserFollowingProfile()
     }
-  }, [user?.username, userId])
+  }, [user, user?.username, userId])
 
   return (
     <div className="grid grid-cols-3 gap-4 justify-between mx-auto max-w-screen-lg">
       <div className="container flex justify-center items-center">
         {username ? (
-          <img
-            className="rounded-full h-40 w-40 flex"
-            alt={`${fullName} profile picture`}
-            src={`/images/avatars/${username}.jpg`}
-            onError={(e) => {
-              const target = e.target as HTMLImageElement
-              target.src = DEFAULT_IMAGE_PATH
-            }}
-          />
+          <span className="flex">
+            <Image
+              className="rounded-full flex"
+              alt={`${fullName} profile picture`}
+              src={
+                !['steve', 'orwell', 'dali', 'ilerofeev', 'raphael'].includes(username)
+                  ? DEFAULT_IMAGE_PATH
+                  : `/images/avatars/${username}.jpg`
+              }
+              width="160"
+              height="160"
+            />
+          </span>
         ) : (
           <Skeleton circle height={150} width={150} count={1} />
         )}
       </div>
       <div className="flex items-center justify-center flex-col col-span-2">
-        <div className="container flex items-center items-center">
+        <div className="container flex items-center">
           <p className="text-2xl mr-4">{username}</p>
           {activeBtnFollow && isFollowingProfile === null ? (
             <Skeleton count={1} width={80} height={32} />
