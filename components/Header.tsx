@@ -75,9 +75,9 @@ export default function Header() {
                     />
                   </svg>
                 </button>
-                <div className="flex items-center cursor-pointer h-8 w-8">
+                <div className="flex items-center cursor-pointer">
                   <Link href={`/p/${user.username}`}>
-                    <a>
+                    <a className="h-8 w-8">
                       <Image
                         className="rounded-full"
                         src={

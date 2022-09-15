@@ -71,20 +71,14 @@ export default function SignUp() {
         <Image
           src="/images/iphone-with-profile.jpg"
           alt="iPhone with Instagram"
-          width="360"
+          width="460"
           height="627"
         />
       </div>
       <div className="flex flex-col w-2/5">
         <div className="flex flex-col items-center bg-white p-4 border rounded border-gray-primary">
-          <h1 className="flex justify-center w-full">
-            <Image
-              src="/images/logo.png"
-              alt="Unogram"
-              className="mt-2 w-6/12 mb-4"
-              width="136"
-              height="38"
-            />
+          <h1 className="flex justify-center mt-2 w-6/12 mb-4">
+            <Image src="/images/logo.png" alt="Unogram" width="137" height="39" />
           </h1>
           {error && <p className="mb-4 text-xs text-red-primary">{error}</p>}
 
@@ -135,8 +129,8 @@ export default function SignUp() {
         <div className="flex justify-center items-center flex-col w-full bg-white p-4 border rounded border-gray-primary">
           <p className="text-sm">
             Have an account?{` `}
-            <Link href={ROUTES.SIGNIN} className="font-bold text-blue-medium">
-              <a>Sign In</a>
+            <Link href={ROUTES.SIGNIN}>
+              <a className="font-bold text-blue-medium">Sign In</a>
             </Link>
           </p>
         </div>
