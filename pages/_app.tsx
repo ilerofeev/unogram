@@ -1,5 +1,4 @@
 import '../wdyr'
-// import '../styles/app.css'
 import '../styles/globals.css'
 import 'react-loading-skeleton/dist/skeleton.css'
 import FirebaseContext from '../context/firebase'
