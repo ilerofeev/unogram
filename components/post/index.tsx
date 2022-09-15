@@ -4,7 +4,7 @@ import Actions from './Actions'
 import Comments from './Comments'
 import Footer from './Footer'
 import PostHeader from './Post-header'
-import Image from './Image'
+import Image from 'next/image'
 
 export default function Post({ content }: { content: FollowedPhoto }) {
   const commentInput = useRef<HTMLInputElement>(null)
@@ -17,7 +17,7 @@ export default function Post({ content }: { content: FollowedPhoto }) {
    border-gray-primary mb-12"
     >
       <PostHeader username={content.username} />
-      <Image src={content.imageSrc} caption={content.caption} />
+      <Image src={content.imageSrc} alt={content.caption} width="675" height="845" />
       <Actions
         docId={content.docId}
         totalLikes={content.likes.length}

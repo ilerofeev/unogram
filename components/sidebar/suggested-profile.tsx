@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import Image from 'next/image'
+import Link from 'next/link'
 import { updateLoggedInUserFollowing, updateFollowedUserFollowers } from '../../services/firebase'
+import { DEFAULT_IMAGE_PATH } from '../../constants/paths'
 
 export default function SuggestedProfile({
   profileDocId,
@@ -27,13 +29,21 @@ export default function SuggestedProfile({
   return !followed ? (
     <div className="flex flex-row items-center justify-between">
       <div className="flex justify-between items-center">
-        <img
-          className="rounded-full w-8 flex mr-3"
-          src={`/images/avatars/${username}.jpg`}
+        <Image
+          className="rounded-full w-8 flex"
+          src={
+            !['steve', 'orwell', 'dali', 'ilerofeev', 'raphael'].includes(username)
+              ? DEFAULT_IMAGE_PATH
+              : `/images/avatars/${username}.jpg`
+          }
           alt={username}
+          width="32"
+          height="32"
         />
-        <Link to={`/p/${username}`}>
-          <p className="font-bold text-sm">{username}</p>
+        <Link href={`/p/${username}`}>
+          <a>
+            <p className="font-bold text-sm ml-3">{username}</p>
+          </a>
         </Link>
       </div>
       <button
