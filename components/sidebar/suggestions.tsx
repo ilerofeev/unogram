@@ -22,7 +22,7 @@ export default function Suggestions({
     }
 
     if (userId) suggestedProfiles()
-  }, [userId])
+  }, [userId, following])
 
   if (!profiles) return <Skeleton count={1} height={150} className="mt-5" />
 
