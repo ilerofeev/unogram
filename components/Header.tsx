@@ -70,16 +70,18 @@ export default function Header() {
               <HeartIcon className="navBtn" />
               <div className="h-10 w-10 relative rounded-full">
                 <Link href={`/p/${user.username}`} aria-label="my profile">
-                  <Image
-                    src={
-                      !['steve', 'orwell', 'dali', 'ilerofeev', 'raphael'].includes(user.username)
-                        ? DEFAULT_IMAGE_PATH
-                        : `/images/avatars/${user.username}.jpg`
-                    }
-                    alt={`${user.username} profile`}
-                    layout="fill"
-                    className="rounded-full cursor-pointer"
-                  />
+                  <a>
+                    <Image
+                      src={
+                        !['steve', 'orwell', 'dali', 'ilerofeev', 'raphael'].includes(user.username)
+                          ? DEFAULT_IMAGE_PATH
+                          : `/images/avatars/${user.username}.jpg`
+                      }
+                      alt={`${user.username} profile`}
+                      layout="fill"
+                      className="rounded-full cursor-pointer"
+                    />
+                  </a>
                 </Link>
               </div>
               {/* <button
