@@ -4,7 +4,7 @@ import LoggedInUserContext from '../context/loggedInUser'
 import usePhotos from '../hooks/use-photos'
 import Post from './post'
 
-export default function Timeline() {
+export default function Posts() {
   const { user } = useContext(LoggedInUserContext)
   const { photos } = usePhotos(user)
 
@@ -18,5 +18,5 @@ export default function Timeline() {
     )
   }
 
-  return <div className="container col-span-2">{renderPhotos()}</div>
+  return <div className="col-span-2">{renderPhotos()}</div>
 }

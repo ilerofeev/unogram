@@ -2,6 +2,7 @@ import { arrayUnion, doc, updateDoc } from 'firebase/firestore/lite'
 import { FormEvent, RefObject, useContext, useState } from 'react'
 import UserContext from '../../context/user'
 import { firestore } from '../../lib/firebase'
+import { EmojiHappyIcon } from '@heroicons/react/outline'
 
 export default function AddComment({
   docId,
@@ -35,16 +36,17 @@ export default function AddComment({
   return (
     <div className="border-t border-gray-primary">
       <form
-        className="flex justify-between pl-0 pr-5"
+        className="flex items-center p-4"
         method="POST"
         onSubmit={(event) =>
           comment.length >= 1 ? handleSubmitComment(event) : event.preventDefault()
         }
       >
+        <EmojiHappyIcon className="btn" />
         <input
           aria-label="Add a comment"
           autoComplete="off"
-          className="text-sm text-gray-base w-full mr-3 py-5 px-4"
+          className="border-none flex-1 focus:ring-0 outline-none"
           type="text"
           name="add-comment"
           placeholder="Add a comment..."
@@ -53,7 +55,7 @@ export default function AddComment({
           ref={commentInput}
         />
         <button
-          className={`text-sm font-bold text-blue-medium ${!comment && 'opacity-25'}`}
+          className={`text-sm font-semibold text-blue-400 ${!comment && 'opacity-25'}`}
           type="button"
           disabled={comment.length < 1}
           onClick={handleSubmitComment}
