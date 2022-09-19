@@ -27,30 +27,27 @@ export default function SuggestedProfile({
   }
 
   return !followed ? (
-    <div className="flex flex-row items-center justify-between">
-      <div className="flex justify-between items-center">
-        <Image
-          className="rounded-full w-8 flex"
-          src={
-            !['steve', 'orwell', 'dali', 'ilerofeev', 'raphael'].includes(username)
-              ? DEFAULT_IMAGE_PATH
-              : `/images/avatars/${username}.jpg`
-          }
-          alt={username}
-          width="32"
-          height="32"
-        />
-        <Link href={`/p/${username}`}>
-          <a>
-            <p className="font-bold text-sm ml-3">{username}</p>
-          </a>
-        </Link>
+    <div className="flex items-center justify-between mt-3">
+      <Image
+        className="rounded-full border p-[2px]"
+        src={
+          !['steve', 'orwell', 'dali', 'ilerofeev', 'raphael'].includes(username)
+            ? DEFAULT_IMAGE_PATH
+            : `/images/avatars/${username}.jpg`
+        }
+        alt={username}
+        width="40"
+        height="40"
+      />
+
+      <div className="flex-1 ml-4">
+        <h2 className="font-bold text-sm">
+          <Link href={`/p/${username}`}>{username}</Link>
+        </h2>
+        {/* <h3 className="text-xs text-gray-400">Works at {}</h3> */}
       </div>
-      <button
-        className="text-xs font-bold text-blue-medium"
-        type="button"
-        onClick={handleFollowUser}
-      >
+
+      <button className="text-blue-400 text-sm" type="button" onClick={handleFollowUser}>
         Follow
       </button>
     </div>
