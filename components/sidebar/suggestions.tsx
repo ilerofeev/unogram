@@ -13,37 +13,36 @@ export default function Suggestions({
   following?: string[]
   loggedInUserDocId?: string
 }) {
-  const [profiles, setProfiles] = useState<User[] | null>(null)
+  const [suggestions, setSuggestions] = useState<User[] | null>(null)
 
   useEffect(() => {
     async function suggestedProfiles() {
       const response = await getSuggestedProfiles(userId!, following!)
-      setProfiles(response)
+      setSuggestions(response)
     }
 
     if (userId) suggestedProfiles()
   }, [userId, following])
 
-  if (!profiles) return <Skeleton count={1} height={150} className="mt-5" />
+  if (!suggestions) return <Skeleton count={1} height={150} className="mt-5" />
 
-  return profiles.length === 0 ? null : (
-    <div className="rounded flex flex-col">
-      <div className="text-sm flex items-center justify-between mb-2">
-        <p className="font-bold text-gray-base">Suggestions for you</p>
+  return suggestions.length === 0 ? null : (
+    <div className="mt-4">
+      <div className="flex justify-between text-sm mb-5">
+        <h3 className="text-sm font-bold text-gray-400">Suggestions for you</h3>
+        <button className="text-gray-600 font-semibold">See all</button>
       </div>
-      <div className="mt-4 grid gap-5">
-        {userId &&
-          profiles.map((profile) => (
-            <SuggestedProfile
-              key={profile.userId}
-              profileDocId={profile.docId}
-              username={profile.username}
-              profileId={profile.userId}
-              userId={userId}
-              loggedInUserDocId={loggedInUserDocId}
-            />
-          ))}
-      </div>
+      {userId &&
+        suggestions.map((profile) => (
+          <SuggestedProfile
+            key={profile.userId}
+            profileDocId={profile.docId}
+            username={profile.username}
+            profileId={profile.userId}
+            userId={userId}
+            loggedInUserDocId={loggedInUserDocId}
+          />
+        ))}
     </div>
   )
 }
