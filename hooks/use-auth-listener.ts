@@ -9,7 +9,6 @@ export default function useAuthListener() {
 
   useEffect(() => {
     if (localStorage.getItem('authUser')) setUser(JSON.parse(localStorage.getItem('authUser')!))
-
     const auth = getAuth()
     const listener = onAuthStateChanged(auth, (authUser) => {
       if (authUser) {
@@ -21,7 +20,6 @@ export default function useAuthListener() {
         setUser(null)
       }
     })
-
     return () => listener()
   }, [])
 

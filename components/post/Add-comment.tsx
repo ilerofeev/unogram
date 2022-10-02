@@ -1,7 +1,7 @@
 import { arrayUnion, doc, updateDoc } from 'firebase/firestore/lite'
 import { FormEvent, RefObject, useContext, useState } from 'react'
 import UserContext from '../../context/user'
-import { firestore } from '../../lib/firebase'
+import { db } from '../../lib/firebase'
 import { EmojiHappyIcon } from '@heroicons/react/outline'
 
 export default function AddComment({
@@ -26,7 +26,7 @@ export default function AddComment({
     setComments([...comments, { displayName: user.displayName, comment }])
     setComment('')
 
-    const docRef = doc(firestore, 'photos', docId || '')
+    const docRef = doc(db, 'photos', docId || '')
 
     return await updateDoc(docRef, {
       comments: arrayUnion({ displayName: user?.displayName, comment }),

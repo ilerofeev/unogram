@@ -1,4 +1,4 @@
-import { firestore } from '../lib/firebase'
+import { db } from '../lib/firebase'
 import {
   collection,
   getDocs,
@@ -14,7 +14,7 @@ import { User } from '../hooks/use-user'
 import { Photo } from '../hooks/use-photos'
 
 export async function doesUsernameExist(username: string) {
-  const collectionRef = collection(firestore, 'users')
+  const collectionRef = collection(db, 'users')
   const q = query(collectionRef, where('username', '==', username))
   const result = (await getDocs(q)).docs
 
@@ -22,7 +22,7 @@ export async function doesUsernameExist(username: string) {
 }
 
 export async function getUserByUserId(userId: string) {
-  const collectionRef = collection(firestore, 'users')
+  const collectionRef = collection(db, 'users')
   const q = query(collectionRef, where('userId', '==', userId))
   const result = await getDocs(q)
 
@@ -35,7 +35,7 @@ export async function getUserByUserId(userId: string) {
 }
 
 export async function getSuggestedProfiles(userId: string, following: string[]) {
-  const collectionRef = collection(firestore, 'users')
+  const collectionRef = collection(db, 'users')
   const q = query(collectionRef, where('userId', '!=', userId), limit(10))
   const result = await getDocs(q)
 
@@ -57,7 +57,7 @@ export async function updateLoggedInUserFollowing(
   profileId: string,
   isFollowingProfile: boolean
 ) {
-  const docRef = doc(firestore, 'users', loggedInUserDocId)
+  const docRef = doc(db, 'users', loggedInUserDocId)
   await updateDoc(docRef, {
     following: isFollowingProfile ? arrayRemove(profileId) : arrayUnion(profileId),
   })
@@ -68,14 +68,14 @@ export async function updateFollowedUserFollowers(
   loggedInUserDocId: string,
   isFollowingProfile: boolean
 ) {
-  const docRef = doc(firestore, 'users', profileDocId)
+  const docRef = doc(db, 'users', profileDocId)
   await updateDoc(docRef, {
     followers: isFollowingProfile ? arrayRemove(loggedInUserDocId) : arrayUnion(loggedInUserDocId),
   })
 }
 
 export async function getPhotos(userId: string, following: string[]) {
-  const collectionRef = collection(firestore, 'photos')
+  const collectionRef = collection(db, 'photos')
   const q = query(collectionRef, where('userId', 'in', following))
 
   const result = await getDocs(q)
@@ -103,7 +103,7 @@ export async function getPhotos(userId: string, following: string[]) {
 }
 
 export async function getUserByUsername(username: string) {
-  const collectionRef = collection(firestore, 'users')
+  const collectionRef = collection(db, 'users')
   const q = query(collectionRef, where('username', '==', username.toLowerCase()))
   const result = (await getDocs(q)).docs
 
@@ -117,7 +117,7 @@ export async function getUserByUsername(username: string) {
 }
 
 export async function getUserPhotosByUserId(userId: string) {
-  const collectionRef = collection(firestore, 'photos')
+  const collectionRef = collection(db, 'photos')
   const q = query(collectionRef, where('userId', '==', userId))
   const result = (await getDocs(q)).docs
 
@@ -132,7 +132,7 @@ export async function getUserPhotosByUserId(userId: string) {
 }
 
 export async function isUserFollowingProfile(loggedInUserUsername: string, profileUserId: string) {
-  const collectionRef = collection(firestore, 'users')
+  const collectionRef = collection(db, 'users')
   const q = query(
     collectionRef,
     where('username', '==', loggedInUserUsername),

@@ -1,7 +1,7 @@
 import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore/lite'
 import { KeyboardEvent, useContext, useState } from 'react'
 import UserContext from '../../context/user'
-import { firestore } from '../../lib/firebase'
+import { db } from '../../lib/firebase'
 import {
   BookmarkAltIcon,
   ChatIcon,
@@ -28,7 +28,7 @@ export default function Actions({
   const handleToggleLiked = async () => {
     setToggleLiked((toggleLiked) => !toggleLiked)
 
-    const docRef = doc(firestore, 'photos', docId || '')
+    const docRef = doc(db, 'photos', docId || '')
 
     await updateDoc(docRef, {
       likes: toggleLiked ? arrayRemove(user?.uid) : arrayUnion(user?.uid),
