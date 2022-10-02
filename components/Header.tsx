@@ -14,15 +14,17 @@ import {
   MenuIcon,
 } from '@heroicons/react/outline'
 import { HomeIcon } from '@heroicons/react/solid'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import { useRecoilState } from 'recoil'
 import { modalState } from '../atoms/modalAtom'
+import { getAuth, signOut } from 'firebase/auth'
 
 export default function Header() {
   const loggedInUser = useContext(UserContext)
+  const auth = getAuth()
+
   const { user } = useUser(loggedInUser?.uid)
   const { data: session } = useSession()
-
   const [, setOpen] = useRecoilState(modalState)
 
   return (
@@ -66,7 +68,7 @@ export default function Header() {
               <HeartIcon className="navBtn" />
               <div className="h-10 w-10 relative rounded-full overflow-hidden">
                 <Link href={`/p/${user.username}`} aria-label="my profile">
-                  <a onClick={() => signOut()}>
+                  <a onClick={() => signOut(auth)}>
                     <Image
                       src={session?.user?.image || DEFAULT_IMAGE_PATH}
                       // src={

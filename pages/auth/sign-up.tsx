@@ -1,12 +1,12 @@
 import Link from 'next/link'
-import * as ROUTES from '../constants/routes'
+import * as ROUTES from '../../constants/routes'
 import { createUserWithEmailAndPassword, getAuth, updateProfile } from 'firebase/auth'
 import { collection, addDoc } from 'firebase/firestore/lite'
 import { useRouter } from 'next/router'
 import { FormEvent, useEffect, useState } from 'react'
-import { doesUsernameExist } from '../services/firebase'
+import { doesUsernameExist } from '../../services/firebase'
 import Image from 'next/image'
-import { db } from '../lib/firebase'
+import { db } from '../../lib/firebase'
 
 export default function SignUp() {
   const router = useRouter()

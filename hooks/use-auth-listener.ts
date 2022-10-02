@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
-import { getAuth, onAuthStateChanged, User } from 'firebase/auth'
+import { getAuth, onAuthStateChanged, signOut, User } from 'firebase/auth'
 import * as ROUTES from '../constants/routes'
 
 export default function useAuthListener() {
@@ -10,6 +10,7 @@ export default function useAuthListener() {
   useEffect(() => {
     if (localStorage.getItem('authUser')) setUser(JSON.parse(localStorage.getItem('authUser')!))
     const auth = getAuth()
+
     const listener = onAuthStateChanged(auth, (authUser) => {
       if (authUser) {
         localStorage.setItem('authUser', JSON.stringify(authUser))

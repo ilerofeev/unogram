@@ -78,16 +78,17 @@ export default function SignIn({ providers }: { providers: any[] }) {
               value={password}
               onChange={({ target }) => setPassword(target.value)}
             />
-            {Object.values(providers).map((provider) => (
-              <div key={provider.name}>
-                <button
-                  className="p-3 bg-blue-500 rounded-lg text-white"
-                  onClick={() => signIn(provider.id, { callbackUrl: '/' })}
-                >
-                  Sign in with {provider.name}
-                </button>
-              </div>
-            ))}
+            {providers &&
+              Object.values(providers).map((provider) => (
+                <div key={provider.name}>
+                  <button
+                    className="p-3 bg-blue-500 rounded-lg text-white"
+                    onClick={() => signIn(provider.id, { callbackUrl: '/' })}
+                  >
+                    Sign in with {provider.name}
+                  </button>
+                </div>
+              ))}
             <button
               disabled={isInvalid}
               type="submit"
