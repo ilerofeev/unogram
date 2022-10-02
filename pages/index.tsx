@@ -7,6 +7,7 @@ import { User } from 'firebase/auth'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import * as ROUTES from '../constants/routes'
+import Modal from '../components/Modal'
 
 export default function Dashboard({ user: loggedInuser }: { user: User }) {
   const router = useRouter()
@@ -19,15 +20,15 @@ export default function Dashboard({ user: loggedInuser }: { user: User }) {
   }, [router, loggedInuser])
 
   return (
-    user.userId && (
-      <div className="h-screen overflow-y-scroll scrollbar-hide">
-        <CommonHead />
+    // user.userId && (
+    <div className="h-screen overflow-y-scroll scrollbar-hide">
+      <CommonHead />
 
-        <LoggedInUserContext.Provider value={{ user }}>
-          <Header />
-          <Feed />
-        </LoggedInUserContext.Provider>
-      </div>
-    )
+      <LoggedInUserContext.Provider value={{ user }}>
+        <Header />
+        <Feed />
+        <Modal />
+      </LoggedInUserContext.Provider>
+    </div>
   )
 }
