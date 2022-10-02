@@ -1,5 +1,6 @@
-import { initializeApp } from 'firebase/app'
+import { getApp, getApps, initializeApp } from 'firebase/app'
 import 'firebase/firestore'
+import { getStorage } from 'firebase/storage'
 
 import { getFirestore } from 'firebase/firestore/lite'
 
@@ -12,7 +13,8 @@ const config = {
   appId: '1:507415416694:web:55e13eabdf727e39e73457',
 }
 
-initializeApp(config)
-const firestore = getFirestore()
+const app = !getApps().length ? initializeApp(config) : getApp()
+const db = getFirestore()
+const storage = getStorage()
 
-export { firestore }
+export { app, db, storage }
