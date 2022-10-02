@@ -1,11 +1,22 @@
 import Link from 'next/link'
-import * as ROUTES from '../constants/routes'
+import * as ROUTES from '../../constants/routes'
 import { FormEvent, useEffect, useState } from 'react'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
+import { getProviders, signIn } from 'next-auth/react'
 
-export default function SignIn() {
+export async function getServerSideProps() {
+  const providers = await getProviders()
+
+  return {
+    props: {
+      providers,
+    },
+  }
+}
+
+export default function SignIn({ providers }: { providers: any[] }) {
   const router = useRouter()
 
   const [emailAddress, setEmailAddress] = useState('')
@@ -17,7 +28,6 @@ export default function SignIn() {
 
   const handleSignIn = async (event: FormEvent<HTMLFormElement>) => {
     if (!getAuth || !signInWithEmailAndPassword) return
-
     event.preventDefault()
     try {
       const auth = getAuth()
@@ -68,6 +78,16 @@ export default function SignIn() {
               value={password}
               onChange={({ target }) => setPassword(target.value)}
             />
+            {Object.values(providers).map((provider) => (
+              <div key={provider.name}>
+                <button
+                  className="p-3 bg-blue-500 rounded-lg text-white"
+                  onClick={() => signIn(provider.id, { callbackUrl: '/' })}
+                >
+                  Sign in with {provider.name}
+                </button>
+              </div>
+            ))}
             <button
               disabled={isInvalid}
               type="submit"
