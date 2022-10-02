@@ -1,10 +1,9 @@
-import { KeyboardEvent, useContext } from 'react'
-import * as ROUTES from '../constants/routes'
 import Link from 'next/link'
-import { getAuth, signOut } from 'firebase/auth'
 import useUser from '../hooks/use-user'
 import UserContext from '../context/user'
 import Image from 'next/image'
+import { useContext } from 'react'
+import * as ROUTES from '../constants/routes'
 import { DEFAULT_IMAGE_PATH } from '../constants/paths'
 import {
   SearchIcon,
@@ -15,19 +14,16 @@ import {
   MenuIcon,
 } from '@heroicons/react/outline'
 import { HomeIcon } from '@heroicons/react/solid'
+import { signIn, signOut, useSession } from 'next-auth/react'
+import { useRecoilState } from 'recoil'
+import { modalState } from '../atoms/modalAtom'
 
 export default function Header() {
   const loggedInUser = useContext(UserContext)
   const { user } = useUser(loggedInUser?.uid)
-  const auth = getAuth()
+  const { data: session } = useSession()
 
-  function handleSignOut() {
-    signOut(auth)
-  }
-
-  function handleSignOutKeyboard(event: KeyboardEvent<HTMLButtonElement>) {
-    if (event.key === 'Enter') signOut(auth)
-  }
+  const [, setOpen] = useRecoilState(modalState)
 
   return (
     <header className="h-16 bg-white border-gray-primary mb-8 shadow-sm border-b sticky top-0 z-50">
@@ -53,7 +49,7 @@ export default function Header() {
           />
         </div>
         <div className="flex items-center space-x-4">
-          {user.username ? (
+          {session ? (
             <>
               <Link href={ROUTES.DASHBOARD} aria-label="Dashboard">
                 <HomeIcon className="navBtn" />
@@ -65,59 +61,51 @@ export default function Header() {
                   3
                 </div>
               </div>
-              <PlusCircleIcon className="navBtn" />
+              <PlusCircleIcon className="navBtn" onClick={() => setOpen(true)} />
               <UserGroupIcon className="navBtn" />
               <HeartIcon className="navBtn" />
-              <div className="h-10 w-10 relative rounded-full">
+              <div className="h-10 w-10 relative rounded-full overflow-hidden">
                 <Link href={`/p/${user.username}`} aria-label="my profile">
-                  <a>
+                  <a onClick={() => signOut()}>
                     <Image
-                      src={
-                        !['steve', 'orwell', 'dali', 'ilerofeev', 'raphael'].includes(user.username)
-                          ? DEFAULT_IMAGE_PATH
-                          : `/images/avatars/${user.username}.jpg`
-                      }
+                      src={session?.user?.image || DEFAULT_IMAGE_PATH}
+                      // src={
+                      //   !['steve', 'orwell', 'dali', 'ilerofeev', 'raphael'].includes(user.username)
+                      //     ? DEFAULT_IMAGE_PATH
+                      //     : `/images/avatars/${user.username}.jpg`
+                      // }
                       alt={`${user.username} profile`}
                       layout="fill"
-                      className="rounded-full cursor-pointer"
+                      className="cursor-pointer"
                     />
                   </a>
                 </Link>
               </div>
-              {/* <button
-                type="button"
-                title="Sign Out"
-                onClick={handleSignOut}
-                onKeyDown={handleSignOutKeyboard}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-8 mr-6 text-black-light cursor-pointer"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
-                  />
-                </svg>
-              </button> */}
+              {/* <Link href={ROUTES.SIGNIN}>
+                   <a>
+                     <button
+                       type="button"
+                       className="bg-blue-medium font-bold text-sm rounded text-white w-20 h-8"
+                     >
+                       Signin
+                     </button>
+                   </a>
+                 </Link>
+                */}
             </>
           ) : (
             <>
-              <Link href={ROUTES.SIGNIN}>
-                <a>
-                  <button
-                    type="button"
-                    className="bg-blue-medium font-bold text-sm rounded text-white w-20 h-8"
-                  >
-                    Signin
-                  </button>
-                </a>
-              </Link>
+              {/* <Link href={ROUTES.SIGNIN}>
+                <a> */}
+              <button
+                onClick={() => signIn()}
+                type="button"
+                className="bg-blue-medium font-bold text-sm rounded text-white w-20 h-8"
+              >
+                Signin
+              </button>
+              {/* </a> */}
+              {/* </Link> */}
               <Link href={ROUTES.SIGNUP}>
                 <a>
                   <button
